@@ -1,11 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Movement_Controller : MonoBehaviour
+public class Player : MonoBehaviour
 {
+    [SerializeField]private float playerHealth = 100f;
     private float horizontal;
     private float speed = 8f;
     private float jumpingPower = 16f;
@@ -52,4 +49,5 @@ public class Movement_Controller : MonoBehaviour
     {
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
     }
+    
 }
