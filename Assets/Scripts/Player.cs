@@ -6,11 +6,10 @@ public class Player : MonoBehaviour
     private float speed = 8f;
     private float jumpingPower = 16f;
     private bool isFacingRight = true;
-	private bool attacking = false;
-	[SerializeField] private float playerHealth = 100f;
+    private bool attacking = false;
 	[SerializeField] private float timetoAtack = 0.25f;
 	[SerializeField] private float timer = 0f;
-	[SerializeField] private GameObject attackArea =default;
+	[SerializeField] private GameObject attackArea;
     [SerializeField] private Animator animator;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
@@ -18,7 +17,7 @@ public class Player : MonoBehaviour
 
 	void Start()
 	{
-		attackArea = transform.GetChild(0).gameObject;
+		//attackArea = transform.GetChild(0).gameObject;
 	}
     private void Update()
     {
@@ -26,10 +25,23 @@ public class Player : MonoBehaviour
 		{	
 			animator.SetBool("isAtacking",true);
 			Debug.LogError("Attack");
+			Attack();
 		}
 		else
 		{	
 			animator.SetBool("isAtacking",false);
+		}
+
+		if (attacking)
+		{
+			timer += Time.deltaTime;
+
+			if (timer >= timetoAtack)
+			{
+				timer = 0;
+				attacking = false;
+				attackArea.SetActive(attacking);
+			}
 		}
         horizontal = Input.GetAxisRaw("Horizontal");
         Flip();
@@ -70,7 +82,14 @@ public class Player : MonoBehaviour
 
     private bool isGrounded()
     {
+	    animator.SetBool("isJumping", false);
         return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+    }
+
+    private void Attack()
+    {
+	    attacking = true;
+	    attackArea.SetActive(attacking);
     }
     
 }
